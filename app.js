@@ -2,6 +2,13 @@ let ballX = 75;
 let ballSpeedX = 5;
 let ballY = 75;
 let ballSpeedY = 7;
+
+const brickW = 100;
+const brickH = 50;
+const brickCount = 8;
+
+let brickGrid = [];
+
 let canvas, canvasContext;
 
 let mouseX, mouseY;
@@ -21,6 +28,12 @@ const updateMousePos = (e) => {
   paddleX = mouseX - paddleWidth / 2;
 }
 
+const brickReset = () => {
+  for (var i = 0; i < brickCount; i++) {
+    brickGrid[i] = true;
+  }
+};
+
 window.onload = function() {
   canvas = document.getElementById('canvas');
   canvasContext = canvas.getContext('2d');
@@ -29,6 +42,8 @@ window.onload = function() {
   setInterval(updateAll, 1000/framesPerSecond);
 
   canvas.addEventListener('mousemove', updateMousePos);
+
+  brickReset();
 }
 
 const updateAll = () => {
@@ -81,10 +96,21 @@ const moveAll = () => {
     }
 }
 
+const drawBricks = () => {
+
+  brickGrid.map((brick, index) => {
+    if (brickGrid[index]) {
+      colorRect(brickW*index,0, brickW-2,brickH, 'blue')
+    }
+  })
+}
+
 const drawAll = () => {
   colorRect(0,0, canvas.width, canvas.height, 'black');
   colorCircle(ballX,ballY, 10, 'pink');
   colorRect(paddleX,(canvas.height - paddleDistFromEdge), paddleWidth, paddleThickness, 'white');
+
+  drawBricks();
 
   colorText(`${mouseX}, ${mouseY}`, mouseX,mouseY, 'yellow');
 }
