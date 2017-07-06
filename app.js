@@ -5,7 +5,9 @@ let ballSpeedY = 7;
 
 const brickW = 100;
 const brickH = 50;
-const brickCount = 8;
+const brickGap = 2;
+const brickCols = 8;
+const brickRows = 4;
 
 let brickGrid = [];
 
@@ -29,7 +31,7 @@ const updateMousePos = (e) => {
 }
 
 const brickReset = () => {
-  for (var i = 0; i < brickCount; i++) {
+  for (var i = 0; i < brickCols; i++) {
     brickGrid[i] = true;
   }
 };
@@ -98,11 +100,19 @@ const moveAll = () => {
 
 const drawBricks = () => {
 
+for (let eachRow = 0; eachRow < brickRows; eachRow++) {
   brickGrid.map((brick, index) => {
     if (brickGrid[index]) {
-      colorRect(brickW*index,0, brickW-2,brickH, 'blue')
+      colorRect(brickW*index, brickH*eachRow,
+        brickW-brickGap, brickH-brickGap, 'blue')
     }
   })
+}
+  // brickGrid.map((brick, index) => {
+  //   if (brickGrid[index]) {
+  //     colorRect(brickW*index,0, brickW-brickGap,brickH, 'blue')
+  //   }
+  // })
 }
 
 const drawAll = () => {
@@ -112,7 +122,9 @@ const drawAll = () => {
 
   drawBricks();
 
-  colorText(`${mouseX}, ${mouseY}`, mouseX,mouseY, 'yellow');
+  let mouseBrickCol = mouseX / brickW;
+  let mouseBrickRow = mouseY / brickH;
+  colorText(`${mouseBrickCol}, ${mouseBrickRow}`, mouseX,mouseY, 'yellow');
 }
 
 const colorRect = (topLeftX, topLeftY, boxWidth, boxHeight, fillColor) => {
