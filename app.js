@@ -3,11 +3,11 @@ let ballSpeedX = 5;
 let ballY = 75;
 let ballSpeedY = 7;
 
-const brickW = 100;
-const brickH = 50;
+const brickW = 80;
+const brickH = 20;
 const brickGap = 2;
-const brickCols = 8;
-const brickRows = 4;
+const brickCols = 10;
+const brickRows = 14;
 
 let brickGrid = [];
 
@@ -31,9 +31,10 @@ const updateMousePos = (e) => {
 }
 
 const brickReset = () => {
-  for (var i = 0; i < brickCols; i++) {
+  for (var i = 0; i < brickCols * brickRows; i++) {
     brickGrid[i] = true;
   }
+  // brickGrid[10] = false;
 };
 
 window.onload = function() {
@@ -79,6 +80,16 @@ const moveAll = () => {
     ballSpeedY *= -1;
   }
 
+  let ballBrickCol = Math.floor(ballX / brickW);
+  let ballBrickRow = Math.floor(ballY / brickH);
+  let brickIndexUnderBall = rowColToArrayIndex(ballBrickCol, ballBrickRow);
+  // colorText(`${mouseBrickCol}, ${mouseBrickRow} : ${brickIndexUnderMouse}`, mouseX,mouseY, 'yellow');
+
+  if (brickIndexUnderBall >= 0 &&
+      brickIndexUnderBall < brickCols * brickRows) {
+        brickGrid[brickIndexUnderBall] = false;
+      }
+
   let paddleTopEdgeY = canvas.height - paddleDistFromEdge;
   let paddleBottomEdgeY = paddleTopEdgeY + paddleThickness;
   let paddleLeftEdgeX = paddleX;
@@ -98,11 +109,16 @@ const moveAll = () => {
     }
 }
 
+const rowColToArrayIndex = (col, row) => {
+  return col + brickCols * row;
+}
+
 const drawBricks = () => {
 
 for (let eachRow = 0; eachRow < brickRows; eachRow++) {
   brickGrid.map((brick, index) => {
-    if (brickGrid[index]) {
+    let arrayIndex = rowColToArrayIndex(index, eachRow);
+    if (brickGrid[arrayIndex]) {
       colorRect(brickW*index, brickH*eachRow,
         brickW-brickGap, brickH-brickGap, 'blue')
     }
@@ -121,10 +137,6 @@ const drawAll = () => {
   colorRect(paddleX,(canvas.height - paddleDistFromEdge), paddleWidth, paddleThickness, 'white');
 
   drawBricks();
-
-  let mouseBrickCol = mouseX / brickW;
-  let mouseBrickRow = mouseY / brickH;
-  colorText(`${mouseBrickCol}, ${mouseBrickRow}`, mouseX,mouseY, 'yellow');
 }
 
 const colorRect = (topLeftX, topLeftY, boxWidth, boxHeight, fillColor) => {
