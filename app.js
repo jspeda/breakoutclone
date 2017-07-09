@@ -85,9 +85,13 @@ const moveAll = () => {
   let brickIndexUnderBall = rowColToArrayIndex(ballBrickCol, ballBrickRow);
   // colorText(`${mouseBrickCol}, ${mouseBrickRow} : ${brickIndexUnderMouse}`, mouseX,mouseY, 'yellow');
 
-  if (brickIndexUnderBall >= 0 &&
-      brickIndexUnderBall < brickCols * brickRows) {
-        brickGrid[brickIndexUnderBall] = false;
+  if (ballBrickCol >= 0 && ballBrickCol < brickCols &&
+      ballBrickRow >= 0 && ballBrickRow < brickRows) {
+
+        if (brickGrid[brickIndexUnderBall]) {
+          brickGrid[brickIndexUnderBall] = false;
+          ballSpeedY *= -1;
+        }
       }
 
   let paddleTopEdgeY = canvas.height - paddleDistFromEdge;
