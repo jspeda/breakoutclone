@@ -55,19 +55,19 @@ window.onload = function() {
   canvasContext = canvas.getContext('2d');
 
   const framesPerSecond = 30;
-
-
   canvas.addEventListener('mousemove', updateMousePos);
 
   const start = document.querySelector('.start');
-  start.addEventListener('click', () => {
+
+  const handler = (e) => {
+    start.parentNode.removeChild(start);
     brickReset();
     ballReset();
     setInterval(updateAll, 1000/framesPerSecond);
-  })
+    e.target.removeEventListener(e.tyle, arguments.callee);
+  }
 
-  // brickReset();
-  // ballReset();
+  start.addEventListener('click', handler)
 }
 
 const updateAll = () => {
