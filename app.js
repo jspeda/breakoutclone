@@ -4,10 +4,10 @@ let ballY = 75;
 let ballSpeedY = 7;
 
 const brickW = 80;
-const brickH = 20;
+const brickH = 40;
 const brickGap = 2;
 const brickCols = 10;
-const brickRows = 14;
+const brickRows = 7;
 
 let brickGrid = [];
 
@@ -59,7 +59,7 @@ const ballReset = () => {
   ballY = canvas.height/2;
 }
 
-const moveAll = () => {
+const ballMove = () => {
   ballX += ballSpeedX;
   ballY += ballSpeedY;
 
@@ -79,7 +79,9 @@ const moveAll = () => {
   if (ballY < 0) {
     ballSpeedY *= -1;
   }
+}
 
+const ballBrickHandling = () => {
   let ballBrickCol = Math.floor(ballX / brickW);
   let ballBrickRow = Math.floor(ballY / brickH);
   let brickIndexUnderBall = rowColToArrayIndex(ballBrickCol, ballBrickRow);
@@ -90,10 +92,24 @@ const moveAll = () => {
 
         if (brickGrid[brickIndexUnderBall]) {
           brickGrid[brickIndexUnderBall] = false;
-          ballSpeedY *= -1;
-        }
-      }
 
+          let prevBallX = ballX - ballSpeedX;
+          let prevBallY = ballY - ballSpeedY;
+          let prevBrickCol = Math.floor(prevBallX / brickW);
+          let prevBrickRow = Math.floor(prevBallY / brickH);
+
+          if (prevBrickCol != ballBrickCol) {
+            ballSpeedX *= -1;
+          }
+
+          if (prevBrickRow != ballBrickRow) {
+            ballSpeedY *= -1;
+          }
+        }
+  }
+}
+
+const ballPaddleHandling = () => {
   let paddleTopEdgeY = canvas.height - paddleDistFromEdge;
   let paddleBottomEdgeY = paddleTopEdgeY + paddleThickness;
   let paddleLeftEdgeX = paddleX;
@@ -111,6 +127,12 @@ const moveAll = () => {
       let ballDistFromPaddleCenterX = ballX - centerOfPaddleX;
       ballSpeedX = ballDistFromPaddleCenterX * 0.35;
     }
+}
+
+const moveAll = () => {
+  ballMove();
+  ballBrickHandling();
+  ballPaddleHandling();
 }
 
 const rowColToArrayIndex = (col, row) => {
