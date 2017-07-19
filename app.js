@@ -55,7 +55,7 @@ window.onload = function() {
   canvasContext = canvas.getContext('2d');
 
   const framesPerSecond = 30;
-  canvas.addEventListener('mousemove', updateMousePos);
+  window.addEventListener('mousemove', updateMousePos);
 
   const start = document.querySelector('.start');
 
